@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ConvexClerkProvider from "./providers/ConvexClerkProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   title: "Podify",
   description: "Generate your podcast using AI",
   icons: {
-    icon: "/icons/logo.svg",  
+    icon: "/icons/logo.svg",
   },
 };
 
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ConvexClerkProvider>{children}</ConvexClerkProvider>
       </body>
     </html>
   );
