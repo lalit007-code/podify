@@ -30,7 +30,7 @@ const ProfileCard = ({
         audioUrl: randomPodcast.audioUrl || "",
         imageUrl: randomPodcast.imageUrl || "",
         author: randomPodcast.author,
-        podcastId: randomPodcast._id,
+        podcastId: randomPodcast.id,
       });
     }
   }, [randomPodcast, setAudio]);

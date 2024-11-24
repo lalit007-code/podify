@@ -199,10 +199,10 @@ const PodcastDetails = ({
         podcastTitle={podcast.podcastTitle}
         author={author?.username}
         imageUrl={podcast?.thumbnailUrl}
-        podcastId={podcast._id}
+        podcastId={podcast.id}
         isOwner
         authorImageUrl={author?.imageURL}
-        authorId={author?._id}
+        authorId={author?.id}
       />
 
       {/* Render Podcast Description */}
@@ -222,9 +222,16 @@ const PodcastDetails = ({
         {/* Render Thumbnail Prompt */}
         <div className="flex flex-col gap-4">
           <h1 className="text-18 font-bold text-white-1">Thumbnail Prompt</h1>
-          <p className="text-16 font-medium text-white-2">
-            {podcast?.thumbnailPrompt}
-          </p>
+          {podcast?.thumbnailPrompt ? (
+            <p className="text-16 font-medium text-white-2">
+              {podcast.thumbnailPrompt}
+            </p>
+          ) : (
+            <p className="text-16 font-medium text-white-2">
+              The author did not use AI to generate a thumbnail for this
+              podcast.
+            </p>
+          )}
         </div>
       </div>
 

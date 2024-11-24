@@ -46,11 +46,11 @@ const ProfilePage = ({
           <div className="podcast_grid">
             {podcastsData.slice(0, 4).map((podcast) => (
               <PodcastCard
-                key={podcast._id}
+                key={podcast.id}
                 imgUrl={podcast.imageUrl}
                 title={podcast.podcastTitle}
                 description={podcast.podcastDescription}
-                podcastId={podcast._id}
+                podcastId={podcast.id}
               />
             ))}
           </div>

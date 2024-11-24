@@ -10,6 +10,7 @@ import { PodcastDetailPlayerProps } from "@/types/Index";
 import LoaderSpinner from "./LoaderSpinner";
 import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { deletePodcastById } from "@/app/action/action";
 
 const PodcastDetailPlayer = ({
   audioUrl,
@@ -26,11 +27,10 @@ const PodcastDetailPlayer = ({
   const { setAudio } = useAudio();
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
-  // const deletePodcast = useMutation(api.podcasts.deletePodcast);
 
   const handleDelete = async () => {
     try {
-      // await deletePodcast({ podcastId, imageStorageId, audioStorageId });
+      await deletePodcastById(podcastId);
       toast({
         title: "Podcast deleted",
       });
