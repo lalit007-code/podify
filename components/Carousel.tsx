@@ -1,20 +1,17 @@
 import React, { useCallback } from "react";
-import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
+import { EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "@/components/EmblaCarouselDot";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import { CarouselProps } from "@/types/Index";
+
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import LoaderSpinner from "./LoaderSpinner";
-import { useQuery } from "convex/react";
 
-import { api } from "@/convex/_generated/api";
+import { Podcast } from "./RightSideBar";
 
-const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
+const EmblaCarousel = ({ podcast }: { podcast: Podcast[] }) => {
   const router = useRouter();
-  const fansLikeDetails = useQuery(api.podcasts.getTrendingPodcasts);
-  console.log(fansLikeDetails);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false }, [Autoplay()]);
 
@@ -36,8 +33,10 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
   );
 
   // Safely handle the case when fansLikeDetails is undefined or null
-  const slides =
-    fansLikeDetails && fansLikeDetails.length > 0 ? fansLikeDetails : [];
+  console.log("podcast", podcast);
+  console.log("podcast length", podcast.length);
+  const slides = podcast && podcast.length > 0 ? podcast : [];
+  console.log("slides", slides);
 
   if (slides.length === 0) return <LoaderSpinner />;
 
@@ -47,14 +46,14 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
       ref={emblaRef}
     >
       <div className="flex">
-        {slides.slice(0, 5).map((item: any) => (
+        {slides.slice(0, 5).map((item: Podcast) => (
           <figure
-            key={item._id}
+            key={item.id}
             className="carousel_box"
-            onClick={() => router.push(`/podcasts/${item._id}`)}
+            onClick={() => router.push(`/podcasts/${item.id}`)}
           >
             <Image
-              src={item.imageUrl}
+              src={item.thumbnailUrl!}
               alt="card"
               fill
               className="absolute size-full rounded-xl border-none"
@@ -66,9 +65,9 @@ const EmblaCarousel = ({ fansLikeDetail }: CarouselProps) => {
               <p className="text-12 font-normal text-white-2">
                 {item.podcastDescription}
               </p>
-              <p className="text-12 font-normal text-white-2">
-                Duration: {item.audioDuration}
-              </p>
+              {/* <p className="text-12 font-normal text-white-2">
+                Duration: {item.}
+              </p> */}
             </div>
           </figure>
         ))}

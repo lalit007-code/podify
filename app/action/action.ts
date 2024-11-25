@@ -68,3 +68,27 @@ export async function getPodcast() {
   });
   return podcast;
 }
+
+export async function getTopPodcasters() {
+  const TopPodcasters = await prisma.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      clerId: true,
+      imageURL: true,
+      _count: {
+        select: {
+          podcasts: true,
+        },
+      },
+    },
+    orderBy: {
+      podcasts: {
+        _count: "desc",
+      },
+    },
+  });
+
+  return TopPodcasters;
+}

@@ -3,22 +3,66 @@
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Carousel from "./Carousel";
-import { useQuery } from "convex/react";
-import { api } from "@/convex/_generated/api";
+
 import { useRouter } from "next/navigation";
-import LoaderSpinner from "./LoaderSpinner";
+
 import { useAudio } from "@/providers/AudioProvider";
 import { cn } from "@/lib/utils";
+import { getPodcast, getTopPodcasters } from "@/app/action/action";
+
+interface User {
+  id: string;
+  username: string;
+  email: string;
+
+  imageURL: string | null;
+  _count: {
+    podcasts: number;
+  };
+}
+export interface Podcast {
+  id: string;
+  audioURL: string | null;
+  authorId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  podcastDescription: string | null; // Adjusted to allow null
+  podcastTitle: string | null;
+  thumbnailPrompt: string | null; // Adjusted to allow null
+  thumbnailUrl: string | null;
+  voiceCountry: string | null;
+  voiceGender: string | null;
+  voiceLanguage: string | null;
+  voiceModel: string | null; // Already nullable
+}
 
 const RightSidebar = () => {
   const { user } = useUser();
-  const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
+  // const topPodcasters = useQuery(api.users.getTopUserByPodcastCount);
+  const [topPodcasters, setTopPodcasters] = useState<User[]>([]);
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const router = useRouter();
 
+  // console.log("podcasts", podcasts);
   const { audio } = useAudio();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data: User[] = await getTopPodcasters(); // Fetch data
+        const data2: Podcast[] = await getPodcast();
+        setTopPodcasters(data);
+        setPodcasts(data2);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <section
@@ -44,7 +88,7 @@ const RightSidebar = () => {
       </SignedIn>
       <section>
         <Header headerTitle="Fans Like You" />
-        <Carousel fansLikeDetail={topPodcasters!} />
+        <Carousel podcast={podcasts} />
       </section>
       <section className="flex flex-col gap-8 pt-12">
         <Header headerTitle="Top Podcastrs" />
@@ -53,23 +97,23 @@ const RightSidebar = () => {
             <div
               key={podcaster.id}
               className="flex cursor-pointer justify-between"
-              onClick={() => router.push(`/profile/${podcaster.clerkId}`)}
+              onClick={() => router.push(`/profile/${podcaster.id}`)}
             >
               <figure className="flex items-center gap-2">
                 <Image
-                  src={podcaster.imageUrl}
-                  alt={podcaster.name}
+                  src={podcaster.imageURL!}
+                  alt={podcaster.username}
                   width={44}
                   height={44}
                   className="aspect-square rounded-lg"
                 />
                 <h2 className="text-14 font-semibold text-white-1">
-                  {podcaster.name}
+                  {podcaster.username}
                 </h2>
               </figure>
               <div className="flex items-center">
                 <p className="text-12 font-normal text-white-1">
-                  {/* {podcaster.totalPodcasts} podcasts */}8 podcasts
+                  {podcaster._count.podcasts}
                 </p>
               </div>
             </div>
