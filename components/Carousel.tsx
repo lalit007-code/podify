@@ -33,10 +33,8 @@ const EmblaCarousel = ({ podcast }: { podcast: Podcast[] }) => {
   );
 
   // Safely handle the case when fansLikeDetails is undefined or null
-  console.log("podcast", podcast);
-  console.log("podcast length", podcast.length);
+
   const slides = podcast && podcast.length > 0 ? podcast : [];
-  console.log("slides", slides);
 
   if (slides.length === 0) return <LoaderSpinner />;
 
