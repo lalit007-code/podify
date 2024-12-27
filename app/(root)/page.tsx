@@ -17,7 +17,6 @@ const Home = () => {
       try {
         setLoading(true); // Set loading to true at the start of fetching
         const data = await getPodcast(); // Fetch podcast data
-        console.log("podcasts bulk data", data);
 
         setPodcastsData(data); // Update state with fetched data
         toast({
