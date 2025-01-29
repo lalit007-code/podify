@@ -19,7 +19,7 @@ type GenerateAudioProps = {
   setAudioUrl: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export default function   GenerateAudio({
+export default function GenerateAudio({
   voicePrompt,
   setVoicePrompt,
   selectedGender,

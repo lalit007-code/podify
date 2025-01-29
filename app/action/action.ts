@@ -92,3 +92,19 @@ export async function getTopPodcasters() {
 
   return TopPodcasters;
 }
+
+export async function getUsersById(id: string) {
+  const getUser = await prisma.user.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      podcasts: true,
+      _count: true,
+    },
+  });
+  return getUser;
+}
+
+
+

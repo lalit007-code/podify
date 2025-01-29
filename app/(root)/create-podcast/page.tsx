@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 
 import GenerateThumbnail from "@/components/GenerateThumbnail";
@@ -36,17 +36,9 @@ const CreatePodcast = () => {
   const router = useRouter();
   const { toast } = useToast();
 
-  // //image id
-  // const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
-  //   null
-  // );
-  // const [audioDuration, setAudioDuration] = useState(0);
   const [imagePrompt, setImagePrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  // //audio duration
-
-  //is submitting
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [audioUrl, setAudioUrl] = useState("");
@@ -56,20 +48,6 @@ const CreatePodcast = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const { user } = useUser();
 
-  // console.log(audioUrl);
-  // console.log(voicePrompt);
-  // console.log(selectedCountry);
-  // console.log(selectedGender);
-  // console.log(selectedLanguage);
-  // console.log(
-  //   "clerk",
-  //   user?.primaryEmailAddress?.emailAddress,
-  //   user?.fullName,
-  //   user?.imageUrl
-  // );
-
-  console.log(imageUrl);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,6 +55,11 @@ const CreatePodcast = () => {
       podcastDescription: "",
     },
   });
+  useEffect(() => {
+    if (!user) {
+      router.push("/sign-in");
+    }
+  }, []);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
@@ -88,18 +71,17 @@ const CreatePodcast = () => {
         throw new Error("Please generate audio and image");
       }
       const requestData = {
-        //user data
         ...data,
         emailAddress: user?.primaryEmailAddress?.emailAddress,
         fullName: user?.fullName,
         userImageUrl: user?.imageUrl,
-        //podcast data audio
+
         voicePrompt,
         audioUrl,
         selectedCountry,
         selectedGender,
         selectedLanguage,
-        //podcast data image
+
         imageUrl,
         imagePrompt,
       };

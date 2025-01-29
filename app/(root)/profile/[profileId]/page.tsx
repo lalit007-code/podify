@@ -1,14 +1,12 @@
-"use client";
-
-import { useQuery } from "convex/react";
+// "use client";
 
 import EmptyState from "@/components/EmptyState";
 import LoaderSpinner from "@/components/LoaderSpinner";
 import PodcastCard from "@/components/PodcastCard";
 import ProfileCard from "@/components/ProfileCard";
-import { api } from "@/convex/_generated/api";
+import { getUsersById } from "@/app/action/action";
 
-const ProfilePage = ({
+const ProfilePage = async ({
   params,
 }: {
   params: {
@@ -16,17 +14,17 @@ const ProfilePage = ({
   };
 }) => {
   // Fetching user and podcast data
-  const user = useQuery(api.users.getUserById, {
-    clerkId: params.profileId,
-  });
-  const podcastsData = useQuery(api.podcasts.getTrendingPodcasts);
+  const userWithPodcastById = await getUsersById(params.profileId);
 
   // Handle loading state if data is not yet available
-  if (user === undefined || podcastsData === undefined)
+  if (
+    userWithPodcastById === undefined ||
+    userWithPodcastById?.podcasts === undefined
+  )
     return <LoaderSpinner />;
 
   // Handle case when there are no podcasts available
-  const hasPodcasts = podcastsData;
+  const hasPodcasts = userWithPodcastById.podcasts;
 
   return (
     <section className="mt-9 flex flex-col">
@@ -35,21 +33,21 @@ const ProfilePage = ({
       </h1>
       <div className="mt-6 flex flex-col gap-6 max-md:items-center md:flex-row">
         <ProfileCard
-          podcastData={podcastsData}
-          imageUrl={user?.imageUrl}
-          userFirstName={user?.name}
+          podcastData={userWithPodcastById.podcasts}
+          imageUrl={userWithPodcastById?.imageURL as string}
+          userFirstName={userWithPodcastById?.username}
         />
       </div>
       <section className="mt-9 flex flex-col gap-5">
         <h1 className="text-20 font-bold text-white-1">All Podcasts</h1>
         {hasPodcasts ? (
           <div className="podcast_grid">
-            {podcastsData.slice(0, 4).map((podcast) => (
+            {userWithPodcastById.podcasts.slice(0, 4).map((podcast) => (
               <PodcastCard
                 key={podcast.id}
-                imgUrl={podcast.imageUrl}
+                imgUrl={podcast.thumbnailUrl}
                 title={podcast.podcastTitle}
-                description={podcast.podcastDescription}
+                description={podcast.podcastDescription!}
                 podcastId={podcast.id}
               />
             ))}

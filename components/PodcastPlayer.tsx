@@ -19,7 +19,6 @@ const PodcastPlayer = () => {
   const [error, setError] = useState<string | null>(null); // Track error state
   const { audio } = useAudio();
   const { toast } = useToast();
-  console.log(audio);
 
   const togglePlayPause = () => {
     if (audioRef.current?.paused) {
@@ -57,7 +56,7 @@ const PodcastPlayer = () => {
     }
   };
 
-  const handleAudioError = (error: any) => {
+  const handleAudioError = (error: unknown) => {
     console.error("Audio playback error:", error);
 
     toast({

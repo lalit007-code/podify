@@ -2,8 +2,6 @@
 
 import { Dispatch, SetStateAction } from "react";
 
-import { Id } from "@/convex/_generated/dataModel";
-
 export interface EmptyStateProps {
   title: string;
   search?: boolean;
@@ -12,7 +10,7 @@ export interface EmptyStateProps {
 }
 
 export interface TopPodcastersProps {
-  _id: Id<"users">;
+  _id: string;
   _creationTime: number;
   email: string;
   imageUrl: string;
@@ -20,16 +18,18 @@ export interface TopPodcastersProps {
   name: string;
   podcast: {
     podcastTitle: string;
-    podcastId: Id<"podcasts">;
+    podcastId: string;
   }[];
   totalPodcasts: number;
 }
 
 export interface PodcastProps {
-  _id: Id<"podcasts">;
-  _creationTime: number;
+  // _id: Id<"podcasts">;
+  // _creationTime: number;
 
-  user: Id<"users">;
+  // user: Id<"users">;
+  id: string;
+  user: string;
   podcastTitle: string;
   podcastDescription: string;
   audioUrl: string | null;
@@ -108,7 +108,7 @@ export interface PodcastCardProps {
   imgUrl: string;
   title: string;
   description: string;
-  podcastId: string ;
+  podcastId: string;
 }
 
 export interface CarouselProps {
@@ -126,3 +126,30 @@ export type UseDotButtonType = {
   scrollSnaps: number[];
   onDotButtonClick: (index: number) => void;
 };
+
+export interface Author {
+  id: string;
+  username: string;
+  clerId: string;
+  email: string;
+  imageURL: string;
+  // Add any other properties of `author` if they exist
+}
+
+export interface Podcast {
+  audioURL: string;
+  author: Author;
+  authorId: string;
+  createdAt: Date;
+  id: string;
+  podcastDescription: string;
+  podcastTitle: string;
+  thumbnailPrompt: string;
+  thumbnailUrl: string;
+  updatedAt: Date;
+  voiceCountry: string;
+  voiceGender: string;
+  voiceLanguage: string;
+  voiceModel: string | null;
+  voicePrompt: string;
+}

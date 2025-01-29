@@ -11,7 +11,7 @@ const Searchbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const debouncedValue = useDebounce(search, 500);
+  const debouncedValue = useDebounce(search, 100);
 
   useEffect(() => {
     if (debouncedValue) {
