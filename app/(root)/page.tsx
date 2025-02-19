@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import LoaderSpinner from "@/components/LoaderSpinner";
 
 const Home = () => {
-  const [podcastsData, setPodcastsData] = useState<any>([]);
+  const [podcastsData, setPodcastsData] = useState<unknown>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   useEffect(() => {

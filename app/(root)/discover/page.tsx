@@ -1,15 +1,14 @@
 "use client";
 
-import { getPodcast } from "@/app/action/action";
 import EmptyState from "@/components/EmptyState";
 
 import LoaderSpinner from "@/components/LoaderSpinner";
 import PodcastCard from "@/components/PodcastCard";
-import { Podcast } from "@/components/RightSideBar";
+
 import Searchbar from "@/components/SearchBar";
 import useSWR from "swr";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const fetcher = (url: string) =>
   fetch(url, { method: "GET" }).then((res) => res.json());
@@ -20,11 +19,7 @@ const Discover = ({
   searchParams: { search: string };
 }) => {
   // const [podcastData, setPodcastData] = useState<Podcast[]>([]);
-  const {
-    data: results,
-    error,
-    isLoading,
-  } = useSWR(`/api/search?query=${search}`, fetcher);
+  const { data: results } = useSWR(`/api/search?query=${search}`, fetcher);
 
   return (
     <div className="flex flex-col gap-9">

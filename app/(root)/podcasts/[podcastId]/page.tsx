@@ -16,10 +16,10 @@ const PodcastDetails = ({
   params: { podcastId: string }; // podcastId is a string now
 }) => {
   const { user } = useUser();
-  const [podcast, setPodcast] = useState<any>(null); // Update to use the correct type
+  const [podcast, setPodcast] = useState<unknown>(null); // Update to use the correct type
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [author, setAuthor] = useState<any>(null);
+  const [author, setAuthor] = useState<unknown>(null);
 
   // Fetch podcast data
   useEffect(() => {
@@ -31,7 +31,7 @@ const PodcastDetails = ({
         setPodcast(data.podcast); // Update state with fetched data
 
         setAuthor(data.user);
-        
+
         setLoading(false);
       } catch (err) {
         setError("Error fetching podcast data");
